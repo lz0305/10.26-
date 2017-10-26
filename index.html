@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{margin: 0;padding: 0;}
+        #con{
+            width: 500px;
+            height: 500px;
+            background: red;
+        }
+        #con div{
+            margin: 10px;
+            line-height: 1.5;
+            padding-left: 10px;
+            background: azure;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<input type="text" id="text" placeholder="姓名">
+<input type="text" id="message" placeholder="xinxi">
+<input type="submit" id="btn">
+<div id="con">
+
+</div>
+<script>
+    $(function () {
+        $.ajax({
+            url:"http://localhost:3000/",
+            type:"POST",
+            data:{name:$("#text").val(),message:$("#message").val()},
+            success:function (data) {
+                console.log(data);
+                var str="";
+                for(i in data){
+                    var t=data[i];
+                    console.log(t);
+                    for(i in t){
+                        str+="<div><h2>"+t[i].name+"</h2><p>"+t[i].message+"</p></div>";
+                    }
+                }
+                $("#con").html(str)
+            }
+        });
+        $("#btn").click(function () {
+            console.log($("#text").val());
+            console.log($("#message").val());
+            $.ajax({
+                url:"http://localhost:3000/home",
+                type:"POST",
+                data:{name:$("#text").val(),message:$("#message").val()},
+                success:function (data) {
+                    $("#text").val("");
+                    $("#message").val("");
+                    console.log(data);
+                    var str="";
+                    for(i in data){
+                        var t=data[i];
+                        console.log(t);
+                        for(i in t){
+                            str+="<div><h2>"+t[i].name+"</h2><p>"+t[i].message+"</p></div>";
+                        }
+                    }
+                    $("#con").html(str)
+                }
+            })
+        });
+        $('#con').delegate('div','click',function(){
+            $(this).hide();
+            $.ajax({
+                url:"http://localhost:3000/delete",
+                type:"POST",
+                data:{sc:$(this).children("p").text()},
+                success:function (data) {
+                    console.log(data)
+                }
+            })
+        });
+    })
+</script>
+</body>
+</html>
