@@ -34,15 +34,17 @@ router.post('/delete', function(req, res, next) {
         var sj=JSON.parse(data);
         for(i in sj){
             var t=sj[i];
-            for(i in t){
-              if(t[i]==req.body.sc){
-                  sj.splice(i,1);
-                  console.log(sj)
-                  res.send('删除');
-                  fs.writeFileSync('public/write.txt',JSON.stringify(sj));
-              }
-
+            if(t.message==req.body.sc){
+              console.log(i);
+                sj.splice(i,1);
+                console.log(sj);
+                res.send('删除');
+                fs.writeFileSync('public/write.txt',JSON.stringify(sj));
             }
+            /*for(i in t){
+
+
+            }*/
         }
     });
 });
